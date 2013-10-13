@@ -1,9 +1,23 @@
+--| Canvas2 
+--| Kristoffer Just Andersen, Aarhus University
+--| kja@cs.au.dk
+--| October, 2013
+--|
+--| Designed and tested with Elm 0.9.0.2
+--|
+--| A collaborative vector drawing application, programmed in Elm.
+--| Note it requires the node.js server found in 'CanvasServer.js'
+--|
+--| See the accompanying report, 'Collaborative User-Interfaces with
+--| Functional Reactive Programming'.
+
 import Mouse
 import Window
 import WebSocket
 import Json
 import Dict
 import Either
+import Keyboard
 
 -- UTILITIES
 
@@ -92,7 +106,7 @@ type Line = { from : Point, to : Point }
 
 type Canvas = [Line]
 
---| CHANGE! Added BoxTool
+--| CHANGE Added BoxTool
 data Tool = LineTool { from : Maybe Point }
           | BoxTool { firstCorner : Maybe Point }
 
@@ -105,13 +119,25 @@ initState = { canvas = [],
 
 -- INPUT
 
+--| CHANGE Added a switch command
 data ToolInput = Click Point
                | NoOpTool
                | Switch
 
-toolInput : Signal ToolInput
-toolInput = foldp (\p _ -> Click p) NoOpTool <|
+
+--| CHANGE Rename for consistency
+toolClicks : Signal ToolInput
+toolClicks = foldp (\p _ -> Click p) NoOpTool <|
                   (sampleOn Mouse.clicks Mouse.position)
+
+--| ADDITION Switch on space button
+switches : Signal ToolInput
+switches = foldp (\x s -> if | x -> Switch
+                             | otherwise -> NoOpTool) NoOpTool Keyboard.space
+
+--| CHANGE As before, combined with switch commands
+toolInput : Signal ToolInput
+toolInput = merge switches toolClicks 
 
 data ServerMsg = Delta Line
                | Reset [Line]
@@ -119,6 +145,7 @@ data ServerMsg = Delta Line
 
 -- UPDATE
 
+--| ADDITION Utility to describe boxes as 4 lines
 box : Point -> Point -> [Line]
 box (a, b) (c, d) = 
   [{from = (a, b), to = (a, d)},
@@ -126,10 +153,14 @@ box (a, b) (c, d) =
    {from = (c, b), to = (c, d)},
    {from = (a, d), to = (c, d)}]
 
---| CHANGE! Type sig, multiple lines
+--| CHANGE Type signature now reflects multiple lines.
+--| Added Switch clause.
 stepTool : ToolInput -> ([Line], Tool) -> ([Line], Tool)
 stepTool i (_  ,t) = case i of {
   NoOpTool -> ([], t);
+  Switch -> case t of {
+    LineTool { from } -> ([], BoxTool {firstCorner = from});
+    BoxTool { firstCorner } -> ([], LineTool {from = firstCorner})};
   Click p -> case t of {
     LineTool { from } -> case from of {
        Nothing -> ([], LineTool {from = Just p});
@@ -202,14 +233,14 @@ drawLineTool ((w, h) as dims) mousepos t = collage w h <|
     Nothing -> [];
     Just p -> [traced defaultLine (segment (collageOffset dims p) (collageOffset dims mousepos))]}
 
---| CHANGE Introduced to visualize the boxtool
+--| ADDITION Introduced to visualize the boxtool
 drawBoxTool : (Int, Int) -> (Int, Int) -> { firstCorner : Maybe Point } -> Element
 drawBoxTool ((w, h) as dims) mousepos t = collage w h <|
   case t.firstCorner of {
     Nothing -> [];
     Just p -> map (renderLine dims defaultLine) (box p mousepos) }
 
---| CHANGE Introduced, to discern different tools
+--| ADDITION Introduced, to discern different tools
 drawTool : (Int, Int) -> (Int, Int) -> Tool -> Element
 drawTool dims mpos t = case t of {
   BoxTool r -> drawBoxTool dims mpos r;

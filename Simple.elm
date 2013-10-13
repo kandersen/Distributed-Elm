@@ -1,3 +1,16 @@
+--| Simple
+--| Kristoffer Just Andersen, Aarhus University
+--| kja@cs.au.dk
+--| October, 2013
+--|
+--| Designed and tested with Elm 0.9.0.2
+--|
+--| A simple application for visualizing the last position the
+--| mouse was clicked.
+--|
+--| See the accompanying report, 'Collaborative User-Interfaces with
+--| Functional Reactive Programming'.
+
 import Mouse
 import Window
 

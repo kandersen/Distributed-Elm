@@ -1,4 +1,15 @@
-//Stjaalet med arme og ben fra http://martinsikora.com/nodejs-and-websocket-simple-chat-tutorial
+/* 
+ * Kristoffer Just Andersen, Aarhus University
+ * kja@cs.au.dk
+ * October, 2013
+ * Backing server for the 'Canvas' family of Elm applications.
+ *
+ * See the accompanying report, 'Collaborative User-Interfaces with
+ * Functional Reactive Programming'
+ * 
+ * With many appreciative thanks to Matin Sikora @
+ * http://martinsikora.com/nodejs-and-websocket-simple-chat-tutorial
+ */
 var WebSocketServer = require('websocket').server;
 var http = require('http');
 var fs = require('fs');

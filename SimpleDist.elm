@@ -1,3 +1,18 @@
+--| SimpleDist
+--| Kristoffer Just Andersen, Aarhus University
+--| kja@cs.au.dk
+--| October, 2013
+--|
+--| Designed and tested with Elm 0.9.0.2
+--|
+--| A simple application for visualizing the last position the
+--| mouse was clicked, and 'collaborating' on this with other
+--| clients running the same code. Requires the node.js server
+--| found in 'SimpleServer.js'.
+--|
+--| See the accompanying report, 'Collaborative User-Interfaces with
+--| Functional Reactive Programming'.
+
 import Mouse
 import Window
 import WebSocket

@@ -1,3 +1,19 @@
+--| Simple
+--| Kristoffer Just Andersen, Aarhus University
+--| kja@cs.au.dk
+--| October, 2013
+--|
+--| Designed and tested with Elm 0.9.0.2
+--|
+--| A simple application for visualizing the last position the
+--| mouse was clicked, and 'collaborating' on it  with other 
+--| clients running the same code. In addition, it works off-line,
+--| and switches transparently in case the server drops off the
+--| grid. Requires the node.js server found in 'SimpleServer.js'.
+--|
+--| See the accompanying report, 'Collaborative User-Interfaces with
+--| Functional Reactive Programming'.
+
 import Mouse
 import Window
 import WebSocket

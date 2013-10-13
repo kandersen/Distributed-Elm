@@ -1,3 +1,13 @@
+/*
+ * Kristoffer Just Andersen, Aarhus University
+ * kja@cs.au.dk
+ * October, 2013
+ * 
+ * Possible extension to the Elm WebSocket with 'open' operation. See
+ * the accompanying report, 'Collaborative User-Interfaces with
+ * Functional Reactive Programming'
+ */
+
 Native.MySockets = function(elm) {
     'use strict';
     if (elm.Native.MySockets) return elm.Native.MySockets;
