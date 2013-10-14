@@ -10,24 +10,26 @@ import Maybe
 
 --| Types
 
-type FailKont a =                             ()     -> Maybe a
-type SuccKont a = a          -> FailKont a -> String -> Maybe a
-type Parser   a = SuccKont a -> FailKont a -> String -> Maybe a
+data Unit = Unit
+
+--type FailKont a =                               Unit -> Maybe a
+--type SuccKont a = a          -> FailKont a -> String -> Maybe a
+--type Parser   a = SuccKont a -> FailKont a -> String -> Maybe a
 
 --| Basic Parsers 
 --| Juggling continuations is not for the faint of heart
 
-pUnit : a -> Parser a
+--pUnit : a -> Parser a
 pUnit a sk fk xs = sk a fk xs
 
-pFail : Parser a
-pFail sk fk cs = fk ()
+--pFail : Parser a
+pFail sk fk cs = fk Unit
 
-pAny : Parser Char
+--pAny : Parser Char
 pAny sk fk xs = case xs of 
-  [] -> fk ()
+  [] -> fk Unit
   (c :: cs) -> sk c fk xs
-{-
+
 --pChar : Char -> Parser Char
 pChar c sk fk xs = case xs of
   [] -> fk Unit
@@ -129,4 +131,3 @@ recognize p = p (\_ _ xs -> xs == [] || (fk Unit)) (\_ -> false)
 --| Count the number of possible parses
 --ambiguity : Parser a -> String -> Int
 ambiguity p = p (\_ fk _ -> 1 + (fk Unit)) (\_ -> 0)
--}
