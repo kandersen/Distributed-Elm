@@ -12,6 +12,6 @@ user interfaces, such as we know them from Google Docs.
 
 The main product is found in the file `Canvas2.elm`, in which we
 present a collaborative vector drawing app with multiple tools, with
-transparency of distirbution.
+transparency of distribution.
 
 We refer to the accompanying report found [here](http://kja.compsci.dk/files/elm-report.pdf) for more details.
